@@ -6,7 +6,7 @@
 
 <h1>Alumnos</h1>
 
-<form action="/alumnos" method="POST">
+<form action="/alumnos" method="POST" novalidate>
     {{macros.render_field(form.nombre, class="form-controls")}}
     {{macros.render_field(form.apaterno, class="form-controls")}}
     {{macros.render_field(form.amaterno, class="form-controls")}}

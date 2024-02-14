@@ -3,11 +3,13 @@
 
 {%block content %}
 {% import "_macros.html" as macros %}
-<form action="">
+<form action="" method="post">
     
     <input type="text" name="nombre" placeholder="nombre">
     {{macros.render_input("APaterno", "Apaterno")}}
     {{macros.render_input("Correo", "Correo", "email")}}
 
 </form>
+
+
 {%endblock%}
