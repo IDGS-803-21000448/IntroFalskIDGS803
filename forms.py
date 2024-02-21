@@ -16,8 +16,7 @@ class UsersForm(Form):
         validators.length(min=4, max=15, message='Ingresa un apellido materno valido')
     ])
     edad = IntegerField('edad', [
-        validators.DataRequired(message='El campo es requerido'),
-        validators.length(min=4, max=20, message='Ingresa una edad valido')
+        validators.DataRequired(message='El campo es requerido')
     ])
     correo = EmailField('correo', [
         validators.Email(message='Ingrese un correo valido')

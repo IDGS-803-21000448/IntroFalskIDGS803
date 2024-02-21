@@ -1,11 +1,40 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
 import forms
+from flask import g
+from flask import flash
+from flask import redirect
+from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
+app.secret_key = "esta es la clave secreta"
 
-@app.route("/")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'),404
+#-------------------------------
+@app.before_request
+def before_request():
+    #g.nombre = "Daniel"
+   
+    print("before_request")
+
+
+# --------------------
+    
+@app.after_request
+def after_request(response):
+    print('ultimo')
+    g.nombre = " "
+    if 'Daniel' not in g.nombre and request.endpoint not in ['index']:
+        return redirect('index')
+    return response
+
+# ---------------------    
+@app.route("/index")
 def index():
-    #return "<h1>Hola <br> Mundo</h1>"
+    g.nombre = "Jose"
+
     escuela = "UTL!!!"
     alumnos = ["Mario", "Pedro", "Luis", "Dario"]
     return render_template("index.html",escuela = escuela, alumnos = alumnos)
@@ -37,6 +66,8 @@ def func1(ab = "UTL"):
 
 @app.route("/alumnos", methods=["GET", "POST"])
 def alumnos():
+    print("Dentro de alumnos")
+    print(f"Hola {g.nombre}")
     nom = ''
     apa = ''
     ama = ''
@@ -45,10 +76,10 @@ def alumnos():
         nom = alum_form.nombre.data
         apa = alum_form.apaterno.data
         ama = alum_form.amaterno.data
-        print(f"Nombre {nom}")
-        print(f"aPaterno {apa}")
-        print(f"aMaterno {ama}")
 
+        mensaje = f"Bienvenido {nom}"
+        flash(mensaje)
+    
     return render_template("alumnos.html",
                             form = alum_form,
                             nom=nom, apa=apa, ama=ama)
@@ -67,12 +98,12 @@ def multiplicar():
         return f"<h1> La multiplicacion es: {str(int(num1) * int(num2))} </h1>"
     else:
         return '''
-                <form action="/multiplicar" method="POST">
-                    <label>N1: </label>
                     <input type= "text" name="n1"/> </br>
                     <label>N2: </label>
                     <input type= "text" name="n2"/> </br>
                     <input type="submit"/>
+                <form action="/multiplicar" method="POST">
+                    <label>N1: </label>
                 </form>
              '''
 
